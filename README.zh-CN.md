@@ -2,30 +2,30 @@
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-[![Latest Version](https://img.shields.io/packagist/v/tourze/sensitive-text-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/sensitive-text-detect-bundle)
-[![Build Status](https://github.com/tourze/php-monorepo/workflows/PHPUnit%20Test/badge.svg)](https://github.com/tourze/php-monorepo/actions)
-[![Total Downloads](https://img.shields.io/packagist/dt/tourze/sensitive-text-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/sensitive-text-detect-bundle)
+[![最新版本](https://img.shields.io/packagist/v/tourze/sensitive-text-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/sensitive-text-detect-bundle)
+[![构建状态](https://github.com/tourze/php-monorepo/workflows/PHPUnit%20Test/badge.svg)](https://github.com/tourze/php-monorepo/actions)
+[![总下载量](https://img.shields.io/packagist/dt/tourze/sensitive-text-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/sensitive-text-detect-bundle)
 
-A Symfony bundle for detecting sensitive text in content.
+一个用于检测内容中敏感文本的 Symfony Bundle。
 
-## Features
+## 功能特性
 
-- Simple integration with Symfony applications
-- Replaceable detector implementation through the service container
-- Support for context-aware detection with user object support
-- Built on Symfony's dependency injection and configuration system
+- 与 Symfony 应用程序简单集成
+- 通过服务容器实现可替换的检测器实现
+- 支持带用户对象的上下文感知检测
+- 基于 Symfony 的依赖注入和配置系统构建
 
-## Installation
+## 安装
 
-Install via Composer:
+通过 Composer 安装：
 
 ```bash
 composer require tourze/sensitive-text-detect-bundle
 ```
 
-## Quick Start
+## 快速开始
 
-### Register the Bundle in your Symfony application
+### 在 Symfony 应用中注册 Bundle
 
 ```php
 // config/bundles.php
@@ -35,7 +35,7 @@ return [
 ];
 ```
 
-### Inject and use the service
+### 注入并使用服务
 
 ```php
 <?php
@@ -67,9 +67,9 @@ class TextCheckController extends AbstractController
 }
 ```
 
-## Customizing the Detector
+## 自定义检测器
 
-By default, the bundle uses `DefaultTextSensitiveTextDetector` implementation, which always returns `false`. You can customize the detection logic by implementing the `SensitiveTextDetector` interface and registering your implementation in the container:
+默认情况下，Bundle 使用 `DefaultTextSensitiveTextDetector` 实现，它总是返回 `false`。您可以通过实现 `SensitiveTextDetector` 接口并在容器中注册您的实现来自定义检测逻辑：
 
 ```php
 <?php
@@ -85,20 +85,20 @@ class CustomSensitiveTextDetector implements SensitiveTextDetector
 {
     public function isSensitiveText(string $text, ?UserInterface $user = null): bool
     {
-        // Implement your custom sensitive text detection logic
-        return str_contains($text, 'sensitive-word');
+        // 实现自定义敏感文本检测逻辑
+        return str_contains($text, '敏感词');
     }
 }
 ```
 
-## Testing
+## 测试
 
-Run tests:
+运行测试：
 
 ```bash
 ./vendor/bin/phpunit packages/sensitive-text-detect-bundle/tests
 ```
 
-## License
+## 许可证
 
-This package is released under the MIT License. See the LICENSE file for details.
+该包基于 MIT 许可证发布。详情请参阅 LICENSE 文件。 
