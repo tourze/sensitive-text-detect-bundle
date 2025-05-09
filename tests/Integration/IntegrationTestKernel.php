@@ -25,15 +25,16 @@ class IntegrationTestKernel extends Kernel
     {
         $loader->load(function (ContainerBuilder $container) {
             $container->loadFromExtension('framework', [
+                'secret' => 'TEST_SECRET',
                 'test' => true,
-                'secret' => 'test_secret',
+                'http_method_override' => false,
+                'handle_all_throwables' => true,
+                'php_errors' => [
+                    'log' => true,
+                ],
                 'router' => [
                     'utf8' => true,
                     'resource' => 'kernel::loadRoutes',
-                ],
-                'uid' => [
-                    'time_based_uuid_version' => 7,
-                    'default_uuid_version' => 7,
                 ],
             ]);
 
