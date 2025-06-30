@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * 内容安全服务
  */
-#[AsAlias(SensitiveTextDetector::class)]
+#[AsAlias(id: SensitiveTextDetector::class)]
 class DefaultTextSensitiveTextDetector implements SensitiveTextDetector
 {
     /**

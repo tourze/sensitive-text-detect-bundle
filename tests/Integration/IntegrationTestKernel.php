@@ -11,6 +11,9 @@ use Tourze\SensitiveTextDetectBundle\SensitiveTextDetectBundle;
 use Tourze\SensitiveTextDetectBundle\Service\DefaultTextSensitiveTextDetector;
 use Tourze\SensitiveTextDetectBundle\Service\SensitiveTextDetector;
 
+/**
+ * @internal
+ */
 class IntegrationTestKernel extends Kernel
 {
     public function registerBundles(): iterable
