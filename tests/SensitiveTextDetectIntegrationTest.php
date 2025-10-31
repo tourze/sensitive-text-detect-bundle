@@ -1,39 +1,41 @@
 <?php
 
-namespace Tourze\SensitiveTextDetectBundle\Tests\Integration;
+namespace Tourze\SensitiveTextDetectBundle\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractIntegrationTestCase;
+use Tourze\SensitiveTextDetectBundle\SensitiveTextDetectBundle;
 use Tourze\SensitiveTextDetectBundle\Service\DefaultTextSensitiveTextDetector;
 use Tourze\SensitiveTextDetectBundle\Service\SensitiveTextDetector;
 
-class SensitiveTextDetectIntegrationTest extends KernelTestCase
+/**
+ * @internal
+ */
+#[CoversClass(SensitiveTextDetectBundle::class)]
+#[RunTestsInSeparateProcesses]
+final class SensitiveTextDetectIntegrationTest extends AbstractIntegrationTestCase
 {
-    protected static function getKernelClass(): string
+    protected function onSetUp(): void
     {
-        return IntegrationTestKernel::class;
+        // 集成测试设置
     }
 
     public function testServiceWiring(): void
     {
-        self::bootKernel();
-        $container = self::getContainer();
-
         // 测试服务是否正确注册并可被获取
-        $this->assertTrue($container->has(SensitiveTextDetector::class), 'SensitiveTextDetector 服务未正确注册');
-        $this->assertTrue($container->has(DefaultTextSensitiveTextDetector::class), 'DefaultTextSensitiveTextDetector 服务未正确注册');
-
-        $detector = $container->get(SensitiveTextDetector::class);
+        $detector = self::getService(SensitiveTextDetector::class);
         $this->assertInstanceOf(SensitiveTextDetector::class, $detector, 'SensitiveTextDetector 服务类型不正确');
         $this->assertInstanceOf(DefaultTextSensitiveTextDetector::class, $detector, 'SensitiveTextDetector 应该指向 DefaultTextSensitiveTextDetector 实现');
+
+        $defaultDetector = self::getService(DefaultTextSensitiveTextDetector::class);
+        $this->assertInstanceOf(DefaultTextSensitiveTextDetector::class, $defaultDetector, 'DefaultTextSensitiveTextDetector 服务未正确注册');
     }
 
     public function testServiceFunctionality(): void
     {
-        self::bootKernel();
-        $container = self::getContainer();
-
-        /** @var SensitiveTextDetector $detector */
-        $detector = $container->get(SensitiveTextDetector::class);
+        $detector = self::getService(SensitiveTextDetector::class);
+        $this->assertInstanceOf(SensitiveTextDetector::class, $detector);
 
         // 测试服务基本功能
         $result = $detector->isSensitiveText('test text', null);

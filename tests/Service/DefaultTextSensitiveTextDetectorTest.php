@@ -2,62 +2,78 @@
 
 namespace Tourze\SensitiveTextDetectBundle\Tests\Service;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractIntegrationTestCase;
 use Tourze\SensitiveTextDetectBundle\Service\DefaultTextSensitiveTextDetector;
+use Tourze\SensitiveTextDetectBundle\Service\SensitiveTextDetector;
 
-class DefaultTextSensitiveTextDetectorTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(DefaultTextSensitiveTextDetector::class)]
+#[RunTestsInSeparateProcesses]
+final class DefaultTextSensitiveTextDetectorTest extends AbstractIntegrationTestCase
 {
-    private DefaultTextSensitiveTextDetector $detector;
+    private SensitiveTextDetector $detector;
 
-    protected function setUp(): void
+    protected function onSetUp(): void
     {
-        $this->detector = new DefaultTextSensitiveTextDetector();
+        $this->detector = self::getService(SensitiveTextDetector::class);
     }
 
-    public function testIsSensitiveText_withEmptyString(): void
+    private function getDetector(): SensitiveTextDetector
     {
-        $result = $this->detector->isSensitiveText('', null);
+        return $this->detector;
+    }
+
+    public function testIsSensitiveTextWithEmptyString(): void
+    {
+        $result = $this->getDetector()->isSensitiveText('', null);
         $this->assertFalse($result);
     }
 
-    public function testIsSensitiveText_withNormalText(): void
+    public function testIsSensitiveTextWithNormalText(): void
     {
-        $result = $this->detector->isSensitiveText('This is a normal text', null);
+        $result = $this->getDetector()->isSensitiveText('This is a normal text', null);
         $this->assertFalse($result);
     }
 
-    public function testIsSensitiveText_withSpecialCharacters(): void
+    public function testIsSensitiveTextWithSpecialCharacters(): void
     {
-        $result = $this->detector->isSensitiveText('!@#$%^&*()_+', null);
+        $result = $this->getDetector()->isSensitiveText('!@#$%^&*()_+', null);
         $this->assertFalse($result);
     }
 
-    public function testIsSensitiveText_withLongText(): void
+    public function testIsSensitiveTextWithLongText(): void
     {
         $longText = str_repeat('Long text content. ', 100);
-        $result = $this->detector->isSensitiveText($longText, null);
+        $result = $this->getDetector()->isSensitiveText($longText, null);
         $this->assertFalse($result);
     }
 
-    public function testIsSensitiveText_withUserObject(): void
+    public function testIsSensitiveTextWithUserObject(): void
     {
-        $user = $this->createMock(UserInterface::class);
-        $result = $this->detector->isSensitiveText('Some text', $user);
+        $user = self::createStub(UserInterface::class);
+        $user->method('getUserIdentifier')->willReturn('test_user');
+        $user->method('getRoles')->willReturn(['ROLE_USER']);
+
+        $result = $this->getDetector()->isSensitiveText('Some text', $user);
         $this->assertFalse($result);
     }
 
-    public function testIsSensitiveText_withNullableUserAndText(): void
+    public function testIsSensitiveTextWithNullableUserAndText(): void
     {
         $user = null;
-        $result = $this->detector->isSensitiveText('Some text', $user);
+        $result = $this->getDetector()->isSensitiveText('Some text', $user);
         $this->assertFalse($result);
     }
 
-    public function testIsSensitiveText_withMultibyteCharacters(): void
+    public function testIsSensitiveTextWithMultibyteCharacters(): void
     {
         $multibyteText = '这是中文文本，包含多字节字符';
-        $result = $this->detector->isSensitiveText($multibyteText, null);
+        $result = $this->getDetector()->isSensitiveText($multibyteText, null);
         $this->assertFalse($result);
     }
 }

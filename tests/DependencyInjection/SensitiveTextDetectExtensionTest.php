@@ -2,54 +2,49 @@
 
 namespace Tourze\SensitiveTextDetectBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitSymfonyUnitTest\AbstractDependencyInjectionExtensionTestCase;
 use Tourze\SensitiveTextDetectBundle\DependencyInjection\SensitiveTextDetectExtension;
-use Tourze\SensitiveTextDetectBundle\Service\DefaultTextSensitiveTextDetector;
 
-class SensitiveTextDetectExtensionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(SensitiveTextDetectExtension::class)]
+final class SensitiveTextDetectExtensionTest extends AbstractDependencyInjectionExtensionTestCase
 {
-    private SensitiveTextDetectExtension $extension;
-    private ContainerBuilder $container;
-
-    protected function setUp(): void
+    public function testGetConfigDir(): void
     {
-        $this->extension = new SensitiveTextDetectExtension();
-        $this->container = new ContainerBuilder();
+        $extension = new SensitiveTextDetectExtension();
+        $reflection = new \ReflectionClass($extension);
+        $method = $reflection->getMethod('getConfigDir');
+        $method->setAccessible(true);
+
+        $configDir = $method->invoke($extension);
+        $expectedPath = realpath(__DIR__ . '/../../src/Resources/config');
+        $actualPath = realpath($configDir);
+
+        $this->assertSame($expectedPath, $actualPath);
+        $this->assertDirectoryExists($configDir, '配置目录不存在');
     }
 
-    public function testLoadExtension(): void
+    public function testConfigFileExists(): void
     {
-        $this->extension->load([], $this->container);
+        $extension = new SensitiveTextDetectExtension();
+        $reflection = new \ReflectionClass($extension);
+        $method = $reflection->getMethod('getConfigDir');
+        $method->setAccessible(true);
 
-        // 验证服务是否被正确注册
-        $this->assertTrue($this->container->hasDefinition(DefaultTextSensitiveTextDetector::class), 'DefaultTextSensitiveTextDetector 服务未注册');
+        $configDir = $method->invoke($extension);
+        $servicesFile = $configDir . '/services.yaml';
+
+        $this->assertFileExists($servicesFile, 'services.yaml 文件不存在');
     }
 
     public function testExtensionAlias(): void
     {
-        $this->assertEquals('sensitive_text_detect', $this->extension->getAlias());
-    }
+        $extension = new SensitiveTextDetectExtension();
+        $alias = $extension->getAlias();
 
-    public function testServiceAutowireConfiguration(): void
-    {
-        $this->extension->load([], $this->container);
-
-        $definition = $this->container->getDefinition(DefaultTextSensitiveTextDetector::class);
-        $this->assertTrue($definition->isAutowired(), 'DefaultTextSensitiveTextDetector 服务未配置自动装配');
-        $this->assertTrue($definition->isAutoconfigured(), 'DefaultTextSensitiveTextDetector 服务未配置自动配置');
-    }
-
-    public function testServiceTagging(): void
-    {
-        $this->extension->load([], $this->container);
-
-        // 确保所有服务都正确加载
-        $serviceIds = $this->container->getServiceIds();
-        $filtered = array_filter($serviceIds, function ($id) {
-            return strpos($id, 'Tourze\\SensitiveTextDetectBundle\\Service\\') === 0;
-        });
-
-        $this->assertNotEmpty($filtered, '没有找到任何 Service 服务');
+        $this->assertSame('sensitive_text_detect', $alias);
     }
 }

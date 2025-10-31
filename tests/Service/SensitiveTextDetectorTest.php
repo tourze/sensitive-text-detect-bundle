@@ -1,14 +1,16 @@
 <?php
 
-namespace Tourze\SensitiveTextDetectBundle\Tests\Integration\Service;
+namespace Tourze\SensitiveTextDetectBundle\Tests\Service;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\SensitiveTextDetectBundle\Service\SensitiveTextDetector;
 
 /**
- * @covers \Tourze\SensitiveTextDetectBundle\Service\SensitiveTextDetector
+ * @internal
  */
-class SensitiveTextDetectorTest extends TestCase
+#[CoversClass(SensitiveTextDetector::class)]
+final class SensitiveTextDetectorTest extends TestCase
 {
     public function testInterfaceExists(): void
     {
@@ -19,16 +21,16 @@ class SensitiveTextDetectorTest extends TestCase
     {
         $reflection = new \ReflectionClass(SensitiveTextDetector::class);
         self::assertTrue($reflection->hasMethod('isSensitiveText'));
-        
+
         $method = $reflection->getMethod('isSensitiveText');
         self::assertCount(2, $method->getParameters());
-        
+
         $parameters = $method->getParameters();
         self::assertSame('text', $parameters[0]->getName());
         $textType = $parameters[0]->getType();
         self::assertInstanceOf(\ReflectionNamedType::class, $textType);
         self::assertSame('string', $textType->getName());
-        
+
         self::assertSame('user', $parameters[1]->getName());
         self::assertTrue($parameters[1]->allowsNull());
     }

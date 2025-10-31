@@ -3,12 +3,14 @@
 namespace Tourze\SensitiveTextDetectBundle\Service;
 
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * 内容安全服务
  */
 #[AsAlias(id: SensitiveTextDetector::class)]
+#[Autoconfigure(public: true)]
 class DefaultTextSensitiveTextDetector implements SensitiveTextDetector
 {
     /**

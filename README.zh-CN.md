@@ -5,15 +5,23 @@
 [![最新版本](https://img.shields.io/packagist/v/tourze/sensitive-text-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/sensitive-text-detect-bundle)
 [![构建状态](https://github.com/tourze/php-monorepo/workflows/PHPUnit%20Test/badge.svg)](https://github.com/tourze/php-monorepo/actions)
 [![总下载量](https://img.shields.io/packagist/dt/tourze/sensitive-text-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/sensitive-text-detect-bundle)
+[![许可证](https://img.shields.io/packagist/l/tourze/sensitive-text-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/sensitive-text-detect-bundle)
+[![覆盖率状态](https://coveralls.io/repos/github/tourze/php-monorepo/badge.svg?branch=master)](https://coveralls.io/github/tourze/php-monorepo?branch=master)
 
-一个用于检测内容中敏感文本的 Symfony Bundle。
+一个用于检测内容中敏感文本的 Symfony Bundle。该 Bundle 提供了灵活的接口来实现内容过滤和敏感文本检测，并支持用户上下文。
 
 ## 功能特性
 
-- 与 Symfony 应用程序简单集成
-- 通过服务容器实现可替换的检测器实现
-- 支持带用户对象的上下文感知检测
-- 基于 Symfony 的依赖注入和配置系统构建
+- **简单集成**：易于与任何 Symfony 应用程序集成
+- **灵活接口**：通过服务容器实现可替换的检测器实现
+- **上下文感知**：支持通过 UserInterface 集成进行用户特定检测
+- **框架原生**：基于 Symfony 的依赖注入和配置系统构建
+- **可扩展**：默认实现可以轻松替换为自定义逻辑
+
+## 系统要求
+
+- PHP 8.1+
+- Symfony 6.4+
 
 ## 安装
 
@@ -91,6 +99,28 @@ class CustomSensitiveTextDetector implements SensitiveTextDetector
 }
 ```
 
+## API 参考
+
+### SensitiveTextDetector 接口
+
+```php
+interface SensitiveTextDetector
+{
+    /**
+     * 检查文本是否包含敏感内容
+     *
+     * @param string $text 要检查的文本
+     * @param UserInterface|null $user 可选的用户上下文
+     * @return bool 如果文本敏感则返回 true，否则返回 false
+     */
+    public function isSensitiveText(string $text, ?UserInterface $user = null): bool;
+}
+```
+
+### 默认实现
+
+该 Bundle 包含一个 `DefaultTextSensitiveTextDetector`，它始终返回 `false`。这旨在作为一个占位符，您应该用自己的实现来替换它。
+
 ## 测试
 
 运行测试：
@@ -98,6 +128,15 @@ class CustomSensitiveTextDetector implements SensitiveTextDetector
 ```bash
 ./vendor/bin/phpunit packages/sensitive-text-detect-bundle/tests
 ```
+
+## 贡献
+
+欢迎贡献！请确保：
+
+1. 所有测试通过
+2. 代码遵循 PSR-12 标准
+3. 新功能包含测试
+4. 文档已更新
 
 ## 许可证
 

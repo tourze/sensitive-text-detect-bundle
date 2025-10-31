@@ -3,10 +3,7 @@ services:
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: true
 
-  Tourze\SensitiveTextDetectBundle\Controller\:
-    resource: '../../Controller/'
-  Tourze\SensitiveTextDetectBundle\Repository\:
-    resource: '../../Repository/'
-  Tourze\SensitiveTextDetectBundle\Service\:
-    resource: '../../Service/'
+  Tourze\SensitiveTextDetectBundle\DataFixtures\:
+    resource: '../../DataFixtures/'
