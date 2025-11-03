@@ -8,6 +8,7 @@ use Tourze\BundleDependency\BundleDependencyInterface;
 use Tourze\DoctrineSnowflakeBundle\DoctrineSnowflakeBundle;
 use Tourze\DoctrineTimestampBundle\DoctrineTimestampBundle;
 use Tourze\DoctrineUserBundle\DoctrineUserBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 
 class SensitiveTextDetectBundle extends Bundle implements BundleDependencyInterface
 {
@@ -18,6 +19,7 @@ class SensitiveTextDetectBundle extends Bundle implements BundleDependencyInterf
             DoctrineSnowflakeBundle::class => ['all' => true],
             DoctrineTimestampBundle::class => ['all' => true],
             DoctrineUserBundle::class => ['all' => true],
+            EasyAdminMenuBundle::class => ['all' => true],
         ];
     }
 }
