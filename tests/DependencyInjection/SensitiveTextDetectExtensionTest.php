@@ -20,6 +20,7 @@ final class SensitiveTextDetectExtensionTest extends AbstractDependencyInjection
         $method->setAccessible(true);
 
         $configDir = $method->invoke($extension);
+        $this->assertIsString($configDir);
         $expectedPath = realpath(__DIR__ . '/../../src/Resources/config');
         $actualPath = realpath($configDir);
 
@@ -35,6 +36,7 @@ final class SensitiveTextDetectExtensionTest extends AbstractDependencyInjection
         $method->setAccessible(true);
 
         $configDir = $method->invoke($extension);
+        $this->assertIsString($configDir);
         $servicesFile = $configDir . '/services.yaml';
 
         $this->assertFileExists($servicesFile, 'services.yaml 文件不存在');
