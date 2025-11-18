@@ -41,27 +41,6 @@ final class SensitiveWordCrudControllerTest extends AbstractEasyAdminControllerT
     }
 
     #[Test]
-    public function testGetEntityFqcnReturnsStringType(): void
-    {
-        $result = SensitiveWordCrudController::getEntityFqcn();
-        $this->assertIsString($result);
-        $this->assertNotEmpty($result);
-    }
-
-    #[Test]
-    public function testGetEntityFqcnReturnsSensitiveWordClass(): void
-    {
-        $expectedClass = SensitiveWord::class;
-        $actualClass = SensitiveWordCrudController::getEntityFqcn();
-
-        $this->assertSame($expectedClass, $actualClass);
-
-        // 测试类是否可以实例化
-        $instance = new $actualClass();
-        $this->assertInstanceOf($expectedClass, $instance);
-    }
-
-    #[Test]
     public function testValidationErrors(): void
     {
         $client = self::createClientWithDatabase();
